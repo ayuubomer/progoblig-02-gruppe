@@ -217,14 +217,30 @@ fun restart():
 end
 
 
+fun oversett-nummer-til-hull(nummer :: Number) -> Array:
+  ask:
+    | nummer == 1 then: forste-hull
+    | nummer == 2 then: andre-hull
+    | nummer == 3 then: tredje-hull
+  end
+end
+  
+
+fun play(fra-hull-nr, til-hull-nr):
+  fra-hull = oversett-nummer-til-hull(fra-hull-nr)
+  til-hull = oversett-nummer-til-hull(til-hull-nr)
+  
+  play-move(fra-hull, til-hull)
+end
+  
 
 
-d = ```Velkommen til Hanoi Tårnet 
-for å flytte en disk, skriv play-move(<hull-navn>, <hull-navn>)
-hull-navn kan være en av forste-hull, andre-hull, tredje-hull
+beskrivelse = ```Velkommen til Hanoi Tårnet 
+for å flytte en disk, skriv move(<pinne-nummer>, <pinner-nummer>)
+pinne-nummer kan være en av 1, 2, 3
 EKSEMPEL: 
-play-move(forste-hull, tredje-hull)
+move(1, 3)
 ```
-print(d)
+print(beskrivelse)
 
 tegn() # initiell tilstand 
