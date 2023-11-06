@@ -77,18 +77,27 @@ fun flytt(fra-hull, til-hull):
       raise("du kan ikke flytte fra en tom hull.")
     end
     sirkel = fra-hull.get-now(overst-sirkel-indeks-fra)
-    annen-sirkel = til-hull.get-now(0) # sirkel som ligger i hullen vi skal flytte til. 
-    mulig = (annen-sirkel == 0) or ((annen-sirkel - sirkel) > 0)
-    # for at vi kan flytte en sirkel til en hull må hullen være tom eller sirkelen som ligger der må være større enn den sirkelen vi skal flytte
-    when not(mulig):
-      raise("ikke mulig!")
-     end
+    
     
     var neste-hull-indeks = 0 # hvor i hullen vi skal putte sirkelen. default er 0 
     overst-sirkel-indeks-til = finn-overst-sirkel-indeks(til-hull) # øverst sirkel i hullen vi skal flytte til
     when not(overst-sirkel-indeks-til == -1): # hvis hullen er ikke tom
       neste-hull-indeks := overst-sirkel-indeks-til + 1 # øverst indeks som er ledig
     end
+    
+    
+    annen-sirkel = if overst-sirkel-indeks-til == -1:
+      0
+    else:
+      til-hull.get-now( overst-sirkel-indeks-til) # sirkel som ligger i hullen vi skal flytte til. 
+    end
+    mulig = (annen-sirkel == 0) or ((annen-sirkel - sirkel) > 0)
+    # for at vi kan flytte en sirkel til en hull må hullen være tom eller sirkelen som ligger der må være større enn den sirkelen vi skal flytte
+    when not(mulig):
+      raise("ikke mulig!")
+     end
+    
+
 
     til-hull.set-now(neste-hull-indeks, sirkel) 
     fra-hull.set-now(overst-sirkel-indeks-fra, 0) # slett sirkelen fra forrige hull
@@ -160,21 +169,30 @@ fun resultat() -> Table:
   end
 end
 
+
+
+
 fun se-om-vinner():
   summen-i-tredje-hull = tredje-hull.get-now(0) + tredje-hull.get-now(1) + tredje-hull.get-now(2) + tredje-hull.get-now(3)
   vant = summen-i-tredje-hull == 10
   vant
 end
 
+
+
+
+
 fun play-move(fra-hull, til-hull): 
   block:
     flytt(fra-hull, til-hull)
     
-    vant = se-om-vinner()
+    
     
     bilden = tegn()
     
     
+    
+    vant = se-om-vinner()
     when vant:
       block:
 
@@ -183,6 +201,9 @@ fun play-move(fra-hull, til-hull):
         print("skriv restart() for å begynne nytt spill.")
       end
     end
+    
+    
+    
     
     bilden # må være sist for at funksjonen skal returnere bildet
   end
@@ -215,20 +236,12 @@ fun restart():
     tegn()
   end
 end
-
-
-fun oversett-nummer-til-hull(nummer :: Number) -> Array:
-  ask:
-    | nummer == 1 then: forste-hull
-    | nummer == 2 then: andre-hull
-    | nummer == 3 then: tredje-hull
-  end
-end
   
 
 fun play(fra-hull-nr, til-hull-nr):
-  fra-hull = oversett-nummer-til-hull(fra-hull-nr)
-  til-hull = oversett-nummer-til-hull(til-hull-nr)
+  
+  fra-hull = hanoi.get-now(fra-hull-nr - 1)
+  til-hull = hanoi.get-now(til-hull-nr - 1)
   
   play-move(fra-hull, til-hull)
 end
@@ -236,7 +249,7 @@ end
 
 
 beskrivelse = ```Velkommen til Hanoi Tårnet 
-for å flytte en disk, skriv move(<pinne-nummer>, <pinner-nummer>)
+for å flytte en disk, skriv move(<pinne-nummer>, <pinne-nummer>)
 pinne-nummer kan være en av 1, 2, 3
 EKSEMPEL: 
 move(1, 3)
