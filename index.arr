@@ -238,7 +238,7 @@ fun restart():
 end
   
 
-fun play(fra-hull-nr, til-hull-nr):
+fun move(fra-hull-nr, til-hull-nr):
   
   fra-hull = hanoi.get-now(fra-hull-nr - 1)
   til-hull = hanoi.get-now(til-hull-nr - 1)
